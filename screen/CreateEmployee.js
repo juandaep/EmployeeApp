@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
-import {TextInput} from 'react-native-paper';
+import { StyleSheet, Text, View, Image, FlatList, Modal } from 'react-native';
+import {TextInput, Button} from 'react-native-paper';
 
 const CreateEmployee = ()=>{
     const [Name, setName] = useState("")
@@ -45,6 +45,16 @@ const CreateEmployee = ()=>{
                 mode="outlined"
                 onChangeText={text => setSalary(text)}
             />
+
+            <Button icon="camera" mode="contained" onPress={() => setModal(true)}>
+                Press me
+            </Button>
+            <Modal
+            animationType="slide"
+            transparent={false}
+            visible={modal}>
+                
+            </Modal>
             
         </View>
     )
