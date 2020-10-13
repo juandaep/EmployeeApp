@@ -4,13 +4,13 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 require('./Employee')
 
-// password : RlFVNSblqwLX0DBx
+
 
 app.use(bodyParser.json())
 
 const Employee = mongoose.model("employee")
 
-const mongoUri = "mongodb+srv://ep:RlFVNSblqwLX0DBx@cluster0.z28g1.mongodb.net/<dbname>?retryWrites=true&w=majority"
+const mongoUri = "mongodb+srv://ep:<password>@cluster0.z28g1.mongodb.net/<dbname>?retryWrites=true&w=majority"
 
 mongoose.connect(mongoUri, {
     useNewUrlParser: true,
