@@ -10,7 +10,7 @@ app.use(bodyParser.json())
 
 const Employee = mongoose.model("employee")
 
-const mongoUri = "mongodb+srv://ep:<password>@cluster0.z28g1.mongodb.net/<dbname>?retryWrites=true&w=majority"
+const mongoUri = "mongodb+srv://ep:<password>x@cluster0.z28g1.mongodb.net/<dbname>?retryWrites=true&w=majority"
 
 mongoose.connect(mongoUri, {
     useNewUrlParser: true,

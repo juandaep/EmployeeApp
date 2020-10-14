@@ -1,15 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import { StyleSheet, Text, View, Image, FlatList, ActivityIndicator } from 'react-native';
 import {Card, FAB} from 'react-native-paper'
 
 const Home=({navigation})=> {
-    const data = [
-        {id:"1", name:"Juanda", email:"juanda@gmail.com", salary:"5000000", phone:"081200001111", position:"Web dev", picture:"https://images.unsplash.com/flagged/photo-1578848151039-b8916d7c1c34?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1042&q=80"},
-        {id:"2", name:"Esa", email:"esa@gmail.com", salary:"7000000", phone:"081211110000", position:"Mobile Dev", picture:"https://images.unsplash.com/flagged/photo-1578848151039-b8916d7c1c34?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1042&q=80"},
-        {id:"3", name:"Putra", email:"putra@gmail.com", salary:"8000000", phone:"081222220000", position:"iOs Dev", picture:"https://images.unsplash.com/flagged/photo-1578848151039-b8916d7c1c34?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1042&q=80"},
-        
-    ]
+        //fetch data from CreateEmployee.js
+        const [data,setData] = useState([])
+        const [loading,setLoading]= useState(true)
+        useEffect(()=>{
+            fetch("http://10.0.2.2:3000/")
+            .then(res=>res.json())
+            .then(results=> {
+                setData(results)
+                setLoading(false) 
+            })
+        },[])
 
     const renderList = ((item)=>{
         // console.log(item, '<<<')
@@ -20,7 +24,7 @@ const Home=({navigation})=> {
              <View style={styles.cardView}>
                  <Image 
                         style={{width: 60, height:60, borderRadius:50}}
-                        source= {{uri:"https://images.unsplash.com/flagged/photo-1578848151039-b8916d7c1c34?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1042&q=80"}}
+                        source= {{uri:item.picture}}
                  />
 
                  <View style={{marginLeft:10}}>
@@ -36,13 +40,19 @@ const Home=({navigation})=> {
 
     return(
         <View style={{flex:1}}>
+            {
+            loading?
+            <ActivityIndicator size="large" color="0000ff"/>
+            :
             <FlatList
                 data={data}
                 renderItem={({item}) =>{
                  return renderList(item)   
                 }}
-                keyExtractor={item=>item.id}
+                keyExtractor={item=>item._id}
             />
+        }
+            
 
             <FAB onPress={()=> navigation.navigate("Create")}
                 style={styles.fab}

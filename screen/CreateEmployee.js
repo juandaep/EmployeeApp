@@ -1,16 +1,36 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Modal, Alert } from 'react-native';
+import { StyleSheet, Text, View, Modal, Alert, KeyboardAvoidingView } from 'react-native';
 import {TextInput, Button} from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
-const CreateEmployee = ()=>{
-    const [Name, setName] = useState("")
+const CreateEmployee = (navigation)=>{
+    const [name, setName] = useState("")
     const [phone, setPhone] = useState("")
     const [email, setEmail] = useState("")
     const [salary, setSalary] = useState("")
     const [picture, setPicture] = useState("")
+    const [position, setPosition] = useState("")
     const [modal, setModal] = useState(false)
+
+    //connect to backend
+    const submitData = ()=> {
+        fetch("http://10.0.2.2:3000/send-data", {
+            method:"post",
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({
+                name, email, phone, salary, picture, position
+
+            })
+        })
+        .then(res => res.json())
+        .then(data=>{
+            Alert.alert(`${data.name} is saved successfully`)
+            navigation.navigate("Home")
+        })
+    }
 
     const pickFromGallery = async ()=>{
         const {granted} = await Permissions.askAsync(Permissions.CAMERA_ROLL)
@@ -76,15 +96,15 @@ const CreateEmployee = ()=>{
     return(
         <View style={styles.root}>
             <TextInput 
-                label='Name'
+                label='name'
                 style={styles.inputStyle}
-                value={Name}
+                value={name}
                 theme={theme}
                 mode="outlined"
                 onChangeText={text => setName(text)}
             />
             <TextInput 
-                label='Email'
+                label='email'
                 style={styles.inputStyle}
                 value={email}
                 theme={theme}
@@ -92,7 +112,7 @@ const CreateEmployee = ()=>{
                 onChangeText={text => setEmail(text)}
             />
             <TextInput 
-                label='Phone'
+                label='phone'
                 style={styles.inputStyle}
                 value={phone}
                 theme={theme}
@@ -101,12 +121,20 @@ const CreateEmployee = ()=>{
                 onChangeText={text => setPhone(text)}
             />
             <TextInput 
-                label='Salary'
+                label='salary'
                 style={styles.inputStyle}
                 value={salary}
                 theme={theme}
                 mode="outlined"
                 onChangeText={text => setSalary(text)}
+            />
+            <TextInput 
+                label='position'
+                style={styles.inputStyle}
+                value={position}
+                theme={theme}
+                mode="outlined"
+                onChangeText={text => setPosition(text)}
             />
 
             <Button style={styles.inputStyle}
@@ -121,7 +149,7 @@ const CreateEmployee = ()=>{
                 icon="content-save"
                 mode="contained"
                 theme={theme} 
-                onPress={()=> console.log("Pressed save")}>
+                onPress={()=> submitData()}>
                 Save
             </Button>
             
@@ -157,8 +185,7 @@ const CreateEmployee = ()=>{
                                     cancel
                             </Button>
                     </View>
-            </Modal>
-            
+                </Modal>
         </View>
     )
 }
